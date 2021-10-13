@@ -1,0 +1,44 @@
+<section id="deatils-page">
+  <div class="wrapper">
+    <div class="product-img">
+      <img src="{{homeImageUrl}}" />
+    </div>
+    <div class="product-info">
+      <div class="product-text">
+        <div class="product-text">
+          <h1>Name: {{name}}</h1>
+          <h2>Type: {{type}}</h2>
+          <h4>Year: {{year}}</h4>
+          <h4>City: {{city}}</h4>
+          <p>Description: {{propertyDescription}}</p>
+          {{#if renters}}
+            <!-- if there are already tenants of the housing, separate their names with a comma and a space ", "  -->
+            <p>People rented this housing: {{renters}}</p>
+          {{else}}
+            <!-- If not display: -->
+            <p>People rented this housing: There are no tenants yet.</p>
+          {{/if}}
+        </div>
+      </div>
+
+      <!-- if there is no registered user, do not display buttons-->
+      <div class="product-btn">
+        {{!-- {{#if owner}} --}}
+        <!-- Only for registered user and creator of the housing offer-->
+        <a href="/edit/{{_id}}" class="edit">Edit</a>
+        <a href="/remove/{{_id}}" class="remove">Delete</a>
+        {{!-- {{/if}} --}}
+        {{#if available}}
+          <!-- logged in user with available pieces-->
+          <a href="/rent/{{_id}}" class="rentHome">Rent a home, available 2
+            housing</a>
+          <p class="alRentHome">You have already rent this home</p>
+        {{else}}
+          <!-- logged in user with no available pieces-->
+          <p class="no-housing">No Housing Available!</p>
+        {{/if}}
+
+      </div>
+    </div>
+  </div>
+</section>
