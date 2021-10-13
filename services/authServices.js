@@ -10,10 +10,8 @@ const login = (username, password) => {
     .then((user) => Promise.all([user.validatePassword(password), user]))
     .then(([isValid, user]) => {
       if (isValid) {
-        console.log("Successful login");
         return user;
       } else {
-        console.log("Login not successful");
         throw { message: "Cannot find username or password" };
       }
     })

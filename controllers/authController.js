@@ -7,7 +7,6 @@ const { isAuth, isAlreadyLogged } = require("../middlewares/authMiddleware");
 router.get("/logout", isAuth, (req, res) => {
   res.clearCookie(TOKEN_COOKIE_NAME);
   res.redirect("/");
-  console.log("Logout successful.");
 });
 router.get("/login", isAlreadyLogged, (req, res) => {
   let title = "Login";
