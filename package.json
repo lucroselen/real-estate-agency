@@ -1,15 +1,8 @@
 {
-  "name": "realeastate",
+  "name": "real-estate-agency",
   "version": "1.0.0",
-  "description": "",
+  "description": "Node.js training",
   "main": "index.js",
-  "scripts": {
-    "start": "set NODE_ENV=development&& nodemon ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
@@ -20,5 +13,20 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.13"
-  }
+  },
+  "scripts": {
+    "start": "set NODE_ENV=development&& nodemon ./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lucroselen/real-estate-agency.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lucroselen/real-estate-agency/issues"
+  },
+  "homepage": "https://github.com/lucroselen/real-estate-agency#readme"
 }
