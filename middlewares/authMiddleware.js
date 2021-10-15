@@ -10,6 +10,7 @@ exports.auth = function (req, res, next) {
 
   jwt.verify(token, SECRET, function (err, decodedToken) {
     if (err) {
+      res.clearCookie(TOKEN_COOKIE_NAME);
       return res.status(401).redirect("/login");
     }
 
