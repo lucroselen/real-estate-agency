@@ -37,7 +37,7 @@ router.post("/create-offer", isAuth, async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/details/:houseId", isAuth, async (req, res) => {
+router.get("/details/:houseId", async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Offer Details";
   res.render("details", { ...record, title });
