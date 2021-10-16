@@ -5,8 +5,13 @@ const housingServices = require("../services/housingServices");
 
 router.get("/", async (req, res) => {
   let title = "Homepage";
-  let homeApartments = await housingServices.getLastThree();
-  res.render("home", { homeApartments, title });
+  try {
+    let homeApartments = await housingServices.getLastThree();
+    res.render("home", { homeApartments, title });
+  } catch (error) {
+    console.error(error);
+    res.status(400).end();
+  }
 });
 
 router.get("/search", isAuth, (req, res) => {
