@@ -1,15 +1,16 @@
 const Housing = require("../models/Housing");
 const User = require("../models/User");
 
-const create = (
+const create = ({
   name,
   type,
   year,
   city,
   homeImageUrl,
   propertyDescription,
-  availablePieces
-) => {
+  availablePieces,
+  owner,
+}) => {
   let housing = new Housing({
     name,
     type,
@@ -18,11 +19,13 @@ const create = (
     homeImageUrl,
     propertyDescription,
     availablePieces,
+    owner,
   });
 
   return housing.save();
 };
-const getOne = (id) => Housing.findById(id).populate("renters").lean();
+const getOne = (id) =>
+  Housing.findById(id).populate("renters").populate("owner").lean();
 const getAll = () => Housing.find({}).lean();
 const getLastThree = () =>
   Housing.find({}).limit(3).sort({ _id: "desc" }).lean();

@@ -1,5 +1,5 @@
 const express = require("express");
-const { isAuth } = require("../middlewares/authMiddleware");
+const { isAuth, isOwner } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 const housingServices = require("../services/housingServices");
@@ -25,15 +25,18 @@ router.post("/create-offer", isAuth, async (req, res) => {
     propertyDescription,
     availablePieces,
   } = req.body;
-  await housingServices.create(
+  let owner = req.user._id;
+
+  await housingServices.create({
     name,
     type,
     year,
     city,
     homeImageUrl,
     propertyDescription,
-    availablePieces
-  );
+    availablePieces,
+    owner,
+  });
   res.redirect("/");
 });
 
@@ -41,13 +44,20 @@ router.get("/details/:houseId", async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Offer Details";
   let rentedBy = record.renters.map((x) => x.name).join(", ");
-  let alreadyRented = record.renters.find((x) => x._id == res.locals.user._id);
-  console.log(res.locals.user._id);
-  console.log(alreadyRented);
+  let alreadyRented = record.renters.find((x) => x._id == req.user._id);
+  let isOwnedBy = record.owner._id.toString() == req.user._id;
+  console.log(isOwnedBy);
 
-  res.render("details", { ...record, title, rentedBy, alreadyRented });
+  res.render("details", {
+    ...record,
+    title,
+    rentedBy,
+    alreadyRented,
+    isOwnedBy,
+  });
 });
-router.get("/edit/:houseId", isAuth, async (req, res) => {
+
+router.get("/edit/:houseId", isAuth, isOwner, async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Edit Offer";
   res.render("edit", { ...record, title });
@@ -55,12 +65,12 @@ router.get("/edit/:houseId", isAuth, async (req, res) => {
 
 router.get("/rent/:houseId", isAuth, async (req, res) => {
   let houseId = req.params.houseId;
-  let userId = res.locals.user._id;
+  let userId = req.user._id;
   await housingServices.rent(houseId, userId);
   res.redirect(`/details/${houseId}`);
 });
 
-router.post("/edit/:id", isAuth, async (req, res) => {
+router.post("/edit/:id", isAuth, isOwner, async (req, res) => {
   let {
     name,
     type,
@@ -86,7 +96,7 @@ router.post("/edit/:id", isAuth, async (req, res) => {
   res.redirect(`/details/${id}`);
 });
 
-router.get("/remove/:houseId", isAuth, async (req, res) => {
+router.get("/remove/:houseId", isAuth, isOwner, async (req, res) => {
   await housingServices.deleteRecord(req.params.houseId);
   res.redirect("/housing-for-rent");
 });

@@ -23,11 +23,11 @@
 
       <!-- if there is no registered user, do not display buttons-->
       <div class="product-btn">
-        {{!-- {{#if owner}} --}}
-        <!-- Only for registered user and creator of the housing offer-->
-        <a href="/edit/{{_id}}" class="edit">Edit</a>
-        <a href="/remove/{{_id}}" class="remove">Delete</a>
-        {{!-- {{/if}} --}}
+        {{#if isOwnedBy}}
+          <!-- Only for registered user and creator of the housing offer-->
+          <a href="/edit/{{_id}}" class="edit">Edit</a>
+          <a href="/remove/{{_id}}" class="remove">Delete</a>
+        {{/if}}
         {{#if availablePieces}}
           <!-- logged in user with available pieces-->
           {{#unless alreadyRented}}

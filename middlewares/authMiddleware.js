@@ -1,5 +1,6 @@
 const { TOKEN_COOKIE_NAME, SECRET } = require("../config/constants");
 const jwt = require("jsonwebtoken");
+const housingServices = require("../services/housingServices");
 
 exports.auth = function (req, res, next) {
   let token = req.cookies[TOKEN_COOKIE_NAME];
@@ -35,4 +36,17 @@ exports.isAlreadyLogged = function (req, res, next) {
   }
 
   next();
+};
+
+exports.isOwner = async function (req, res, next) {
+  let housing = await housingServices.getOne(req.params.houseId);
+
+  if (housing.owner._id.toString() == req.user._id) {
+    res.locals.isOwner = true;
+
+    next();
+  } else {
+    res.locals.isOwner = false;
+    next("You are not authorized to edit this Housing");
+  }
 };
