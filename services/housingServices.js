@@ -60,6 +60,15 @@ const update = (
     { runValidators: true }
   );
 
+const rent = async (housingId, userId) => {
+  let house = await Housing.findById(housingId);
+  let renter = await User.findById(userId);
+
+  house.renters.push(renter);
+
+  return house.save();
+};
+
 const deleteRecord = (id) => Housing.deleteOne({ _id: id });
 
 const housingServices = {
@@ -70,6 +79,7 @@ const housingServices = {
   getOne,
   update,
   deleteRecord,
+  rent,
 };
 
 module.exports = housingServices;

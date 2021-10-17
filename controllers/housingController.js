@@ -40,12 +40,22 @@ router.post("/create-offer", isAuth, async (req, res) => {
 router.get("/details/:houseId", async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Offer Details";
-  res.render("details", { ...record, title });
+  let rentedBy = record.renters.map((x) => x.name).join(", ");
+  let alreadyRented = record.renters.find((x) => (x._id = res.locals.user._id));
+
+  res.render("details", { ...record, title, rentedBy, alreadyRented });
 });
 router.get("/edit/:houseId", isAuth, async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Edit Offer";
   res.render("edit", { ...record, title });
+});
+
+router.get("/rent/:houseId", isAuth, async (req, res) => {
+  let houseId = req.params.houseId;
+  let userId = res.locals.user._id;
+  await housingServices.rent(houseId, userId);
+  res.redirect(`/details/${houseId}`);
 });
 
 router.post("/edit/:id", isAuth, async (req, res) => {

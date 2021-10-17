@@ -13,7 +13,7 @@
           <p>Description: {{propertyDescription}}</p>
           {{#if renters}}
             <!-- if there are already tenants of the housing, separate their names with a comma and a space ", "  -->
-            <p>People rented this housing: {{renters}}</p>
+            <p>People rented this housing: {{rentedBy}}</p>
           {{else}}
             <!-- If not display: -->
             <p>People rented this housing: There are no tenants yet.</p>
@@ -28,11 +28,14 @@
         <a href="/edit/{{_id}}" class="edit">Edit</a>
         <a href="/remove/{{_id}}" class="remove">Delete</a>
         {{!-- {{/if}} --}}
-        {{#if available}}
+        {{#if availablePieces}}
           <!-- logged in user with available pieces-->
-          <a href="/rent/{{_id}}" class="rentHome">Rent a home, available 2
-            housing</a>
-          <p class="alRentHome">You have already rent this home</p>
+          {{#unless alreadyRented}}
+            <a href="/rent/{{_id}}" class="rentHome">Rent a home, available 2
+              housing</a>
+          {{else}}
+            <p class="alRentHome">You have already rented this home</p>
+          {{/unless}}
         {{else}}
           <!-- logged in user with no available pieces-->
           <p class="no-housing">No Housing Available!</p>
