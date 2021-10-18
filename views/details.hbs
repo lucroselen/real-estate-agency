@@ -33,13 +33,15 @@
           {{#unless alreadyRented}}
             <a href="/rent/{{_id}}" class="rentHome">Rent a home, available {{availablePieces}}
               housing</a>
-          {{else}}
-            <p class="alRentHome">You have already rented this home</p>
           {{/unless}}
+         
         {{else}}
           <!-- logged in user with no available pieces-->
           <p class="no-housing">No Housing Available!</p>
         {{/if}}
+         {{#if alreadyRented}}
+            <p class="alRentHome">You have already rented this home</p>
+          {{/if}}
         {{/if}}
 {{/if}}
       </div>
