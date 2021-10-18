@@ -44,6 +44,7 @@ router.get("/details/:houseId", async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Offer Details";
   let rentedBy = record.renters.map((x) => x.name).join(", ");
+  record.availablePieces -= record.renters.length;
   let alreadyRented = false;
   if (req.user) {
     alreadyRented = record.renters.find((x) => x._id == req.user._id);
