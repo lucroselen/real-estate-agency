@@ -73,12 +73,17 @@ router.get("/rent/:houseId", isAuth, async (req, res) => {
   let houseId = req.params.houseId;
   let userId = req.user._id;
   let housing = await housingServices.getOne(houseId);
+
   if (
     !(housing.owner._id.toString() == req.user._id) &&
     !housing.renters.find((x) => x._id == req.user._id)
   ) {
-    await housingServices.rent(houseId, userId);
-    res.redirect(`/details/${houseId}`);
+    if (housing.renters.length == housing.availablePieces) {
+      res.status(403).send("<h1>No housing available!</h1>");
+    } else {
+      await housingServices.rent(houseId, userId);
+      res.redirect(`/details/${houseId}`);
+    }
   } else {
     res.status(403).send("<h1>You already rent or own this place!</h1>");
   }
