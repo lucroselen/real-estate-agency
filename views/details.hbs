@@ -20,14 +20,14 @@
           {{/if}}
         </div>
       </div>
-
+{{#if user}}
       <!-- if there is no registered user, do not display buttons-->
       <div class="product-btn">
         {{#if isOwnedBy}}
           <!-- Only for registered user and creator of the housing offer-->
           <a href="/edit/{{_id}}" class="edit">Edit</a>
           <a href="/remove/{{_id}}" class="remove">Delete</a>
-        {{/if}}
+        {{else}}
         {{#if availablePieces}}
           <!-- logged in user with available pieces-->
           {{#unless alreadyRented}}
@@ -40,7 +40,8 @@
           <!-- logged in user with no available pieces-->
           <p class="no-housing">No Housing Available!</p>
         {{/if}}
-
+        {{/if}}
+{{/if}}
       </div>
     </div>
   </div>

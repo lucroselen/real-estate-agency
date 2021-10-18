@@ -44,9 +44,14 @@ router.get("/details/:houseId", async (req, res) => {
   let record = await housingServices.getOne(req.params.houseId);
   let title = "Offer Details";
   let rentedBy = record.renters.map((x) => x.name).join(", ");
-  let alreadyRented = record.renters.find((x) => x._id == req.user._id);
-  let isOwnedBy = record.owner._id.toString() == req.user._id;
-  console.log(isOwnedBy);
+  let alreadyRented = false;
+  if (req.user) {
+    alreadyRented = record.renters.find((x) => x._id == req.user._id);
+  }
+  let isOwnedBy = false;
+  if (req.user) {
+    isOwnedBy = record.owner._id.toString() == req.user._id;
+  }
 
   res.render("details", {
     ...record,
@@ -66,8 +71,13 @@ router.get("/edit/:houseId", isAuth, isOwner, async (req, res) => {
 router.get("/rent/:houseId", isAuth, async (req, res) => {
   let houseId = req.params.houseId;
   let userId = req.user._id;
-  await housingServices.rent(houseId, userId);
-  res.redirect(`/details/${houseId}`);
+  let housing = await housingServices.getOne(houseId);
+  if (!(housing.owner._id.toString() == req.user._id)) {
+    await housingServices.rent(houseId, userId);
+    res.redirect(`/details/${houseId}`);
+  } else {
+    res.status(403).send("<h1>You cannot rent your own place!</h1>");
+  }
 });
 
 router.post("/edit/:id", isAuth, isOwner, async (req, res) => {
