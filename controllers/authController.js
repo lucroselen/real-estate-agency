@@ -14,19 +14,23 @@ router.get("/login", isAlreadyLogged, (req, res) => {
 });
 
 router.post("/login", isAlreadyLogged, async (req, res) => {
-  let { username, password } = req.body;
-  let user = await authServices.login(username, password);
+  try {
+    let { username, password } = req.body;
+    let user = await authServices.login(username, password);
 
-  if (!user) {
-    return res.redirect("/404");
+    if (!user) {
+      return res.redirect("/404");
+    }
+    let token = await authServices.createToken(user);
+
+    res.cookie(TOKEN_COOKIE_NAME, token, {
+      httpOnly: true,
+    });
+
+    res.redirect("/");
+  } catch (error) {
+    res.status(400).send(error);
   }
-  let token = await authServices.createToken(user);
-
-  res.cookie(TOKEN_COOKIE_NAME, token, {
-    httpOnly: true,
-  });
-
-  res.redirect("/");
 });
 
 router.get("/register", isAlreadyLogged, (req, res) => {
@@ -36,8 +40,8 @@ router.get("/register", isAlreadyLogged, (req, res) => {
 
 router.post("/register", isAlreadyLogged, async (req, res) => {
   try {
-    let { name, username, password, rePassword } = await req.body;
-    authServices.register(name, username, password);
+    let { name, username, password, rePassword } = req.body;
+    await authServices.register(name, username, password);
     res.redirect("/login");
   } catch (error) {
     res.status(400).send(error);
