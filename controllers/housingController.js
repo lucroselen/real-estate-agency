@@ -89,7 +89,7 @@ router.get("/rent/:houseId", isAuth, async (req, res) => {
   }
 });
 
-router.post("/edit/:id", isAuth, isOwner, async (req, res) => {
+router.post("/edit/:houseId", isAuth, isOwner, async (req, res) => {
   let {
     name,
     type,
@@ -99,10 +99,10 @@ router.post("/edit/:id", isAuth, isOwner, async (req, res) => {
     propertyDescription,
     availablePieces,
   } = req.body;
-  let id = req.params.id;
+  let houseId = req.params.houseId;
   await housingServices
     .update(
-      id,
+      houseId,
       name,
       type,
       year,
@@ -112,7 +112,7 @@ router.post("/edit/:id", isAuth, isOwner, async (req, res) => {
       availablePieces
     )
     .catch((err) => console.error(err));
-  res.redirect(`/details/${id}`);
+  res.redirect(`/details/${houseId}`);
 });
 
 router.get("/remove/:houseId", isAuth, isOwner, async (req, res) => {
