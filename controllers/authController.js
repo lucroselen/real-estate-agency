@@ -41,8 +41,12 @@ router.get("/register", isAlreadyLogged, (req, res) => {
 router.post("/register", isAlreadyLogged, async (req, res) => {
   try {
     let { name, username, password, rePassword } = req.body;
-    await authServices.register(name, username, password);
-    res.redirect("/login");
+    if (password !== rePassword) {
+      res.status(401).send("<h1>You must fill in all fields!</h1>");
+    } else {
+      await authServices.register(name, username, password);
+      res.redirect("/login");
+    }
   } catch (error) {
     res.status(400).send(error);
   }
