@@ -15,7 +15,7 @@ const search = async (query) => {
   if (query) {
     let result = await getAll();
     result = result.filter((x) =>
-      x.name.toLowerCase().includes(query.toLowerCase())
+      x.type.toLowerCase().includes(query.toLowerCase())
     );
     return result;
   }
