@@ -41,7 +41,6 @@ const update = (
       propertyDescription,
       availablePieces,
     },
-
     { runValidators: true }
   );
 
