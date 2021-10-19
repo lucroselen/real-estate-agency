@@ -1,29 +1,11 @@
 const Housing = require("../models/Housing");
 const User = require("../models/User");
 
-const create = ({
-  name,
-  type,
-  year,
-  city,
-  homeImageUrl,
-  propertyDescription,
-  availablePieces,
-  owner,
-}) => {
-  let housing = new Housing({
-    name,
-    type,
-    year,
-    city,
-    homeImageUrl,
-    propertyDescription,
-    availablePieces,
-    owner,
-  });
-
-  return housing.save();
-};
+const create = (data) => Housing.create(data);
+// const create = (data) => {
+//   let housing = new Housing(data);
+//   return housing.save();
+// };
 const getOne = (id) =>
   Housing.findById(id).populate("renters").populate("owner").lean();
 const getAll = () => Housing.find({}).lean();
