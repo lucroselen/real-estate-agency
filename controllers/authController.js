@@ -39,17 +39,33 @@ router.get("/register", isAlreadyLogged, (req, res) => {
 });
 
 router.post("/register", isAlreadyLogged, async (req, res) => {
+  let { name, username, password, rePassword } = req.body;
+
   try {
-    let { name, username, password, rePassword } = req.body;
+    if (name) {
+      name = name
+        .split(" ")
+        .map((x) => (x = x[0].toUpperCase() + x.slice(1)))
+        .join(" ")
+        .toString();
+    }
     if (password !== rePassword) {
-      res.status(401).send("<h1>You must fill in all fields!</h1>");
+      res.render("register", { error: "Both passwords must be the same!" });
     } else {
       await authServices.register(name, username, password);
       res.redirect("/login");
     }
   } catch (error) {
-    res.status(400).send(error);
+    res.render("register", { error: getErrorMessage(error) });
   }
 });
 
+function getErrorMessage(error) {
+  let errorNames = Object.keys(error.errors);
+  if (errorNames.length > 0) {
+    return error.errors[errorNames[0]].properties.message;
+  } else {
+    return error.message;
+  }
+}
 module.exports = router;
