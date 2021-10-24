@@ -51,7 +51,7 @@ router.get("/details/:houseId", async (req, res) => {
   }
   let isOwnedBy = false;
   if (req.user) {
-    isOwnedBy = record.owner._id.toString() == req.user._id;
+    isOwnedBy = record.owner?._id.toString() == req.user._id;
   }
 
   res.render("details", {
@@ -75,7 +75,7 @@ router.get("/rent/:houseId", isAuth, async (req, res) => {
   let housing = await housingServices.getOne(houseId);
 
   if (
-    !(housing.owner._id.toString() == req.user._id) &&
+    !(housing.owner?._id.toString() == req.user._id) &&
     !housing.renters.find((x) => x._id == req.user._id)
   ) {
     if (housing.renters.length == housing.availablePieces) {
