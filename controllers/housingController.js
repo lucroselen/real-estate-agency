@@ -51,7 +51,7 @@ router.get("/details/:houseId", async (req, res) => {
   }
   let isOwnedBy = false;
   if (req.user) {
-    isOwnedBy = record.owner?._id.toString() == req.user._id;
+    isOwnedBy = record.owner._id.toString() == req.user._id;
   }
 
   res.render("details", {
